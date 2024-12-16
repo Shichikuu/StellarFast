@@ -8,9 +8,6 @@ import javafx.stage.Stage;
 public class Main extends Application{
     private static Stage stage;
 
-    public Main() {
-    }
-
     public static void redirect(Scene newScene) {
         stage.setScene(newScene);
         stage.centerOnScreen();
@@ -24,7 +21,7 @@ public class Main extends Application{
 
     public void start(Stage stage) throws Exception {
         Main.stage = stage;
-        stage.setTitle("Session 10");
-
+        stage.setTitle("StellarFest");
+        new RegisterPage();
     }
 }
