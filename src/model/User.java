@@ -52,10 +52,7 @@ public class User {
     }
 
     public void changeProfile(String email, String name, String oldPassword, String newPassword) {
-        if (!this.user_password.equals(oldPassword)) {
-            throw new IllegalArgumentException("Old password does not match.");
-        }
-        String query = "UPDATE users SET user_email = ?, user_name = ?, user_password = ? WHERE user_id = ?";
+        String query = "UPDATE users SET userEmail = ?, userName = ?, userPassword = ? WHERE userId = ?";
         try (PreparedStatement ps = db.preparedStatement(query)) {
             ps.setString(1, email);
             ps.setString(2, name);
@@ -123,6 +120,7 @@ public class User {
     }
 
     public void checkChangeProfileInput(String email, String name, String oldPassword, String newPassword) {
+
         // Cek apakah email baru sudah digunakan oleh user lain
         User existingEmailUser = getUserByEmail(email);
         if (existingEmailUser != null && !existingEmailUser.getUser_id().equals(this.user_id)) {
@@ -133,6 +131,10 @@ public class User {
         User existingNameUser = getUserByUsername(name);
         if (existingNameUser != null && !existingNameUser.getUser_id().equals(this.user_id)) {
             throw new IllegalArgumentException("Username is already in use.");
+        }
+
+        if (!this.user_password.equals(oldPassword)) {
+            throw new IllegalArgumentException("Old password does not match.");
         }
 
 

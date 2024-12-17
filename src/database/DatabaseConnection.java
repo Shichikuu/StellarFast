@@ -5,7 +5,7 @@ import java.sql.*;
 public class DatabaseConnection {
     private final String USERNAME = "root";
     private final String PASSWORD = "";
-    private final String DATABASE = "ooad_session10";
+    private final String DATABASE = "StellarFestDB";
     private final String HOST = "localhost:3306";
     private final String CONNECTION = String.format("jdbc:mysql://%s/%s", "localhost:3306", "StellarFestDB");
     private Connection con;

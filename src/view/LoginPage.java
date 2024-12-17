@@ -24,7 +24,6 @@ public class LoginPage implements EventHandler<ActionEvent>{
     private Hyperlink linkRegister;
     private HBox hbBtn, hboxLink;
     public Scene scene;
-    private ArrayList<User> users;
     private static String userID = "";
     private static String userRole = "";
     private UserController uc;
@@ -51,7 +50,6 @@ public class LoginPage implements EventHandler<ActionEvent>{
         loginButton = new Button("Login");
         hbBtn = new HBox(10);
         scene = new Scene(root, 1100, 550);
-        users = new ArrayList<>();
         uc = new UserController();
     }
 
@@ -80,7 +78,7 @@ public class LoginPage implements EventHandler<ActionEvent>{
     }
 
     public void setStyle() {
-        title.setStyle("-fx-font-size: 36px;");
+        title.setStyle("-fx-font-size: 36px; -fx-font-weight: bold;");
     }
 
     public void clearFields() {
@@ -119,7 +117,7 @@ public class LoginPage implements EventHandler<ActionEvent>{
                 Main.currUser = uc.login(email, password);
                 showSuccess("Login Success", "Welcome " + view.Main.currUser.getUser_name());
 
-//                Main.redirect(new HomePage().scene);
+                Main.redirect(new ProfilePage().scene);
             }catch (Exception ex) {
                 showAlert("Login Failed", ex.getMessage());
             }
@@ -133,7 +131,6 @@ public class LoginPage implements EventHandler<ActionEvent>{
     public LoginPage() {
         init();
         setPosition();
-//        users = uc.getUsers(users);
         setStyle();
         events();
         view.Main.redirect(scene);

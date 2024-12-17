@@ -28,9 +28,6 @@ public class RegisterPage implements EventHandler<ActionEvent>{
     public Scene scene;
     private ComboBox<String> cbRole;
     private UserController uc;
-    private ArrayList<User> users;
-    private boolean validate;
-    private String id;
 
     public void init() {
         root = new BorderPane();
@@ -44,8 +41,11 @@ public class RegisterPage implements EventHandler<ActionEvent>{
         passwordField = new PasswordField();
         roleLabel = new Label("Role :");
         cbRole = new ComboBox<>();
-        cbRole.getItems().addAll("Event Organizer", "Vendor", "Guest", "Admin");
-        cbRole.setPromptText("Select your role");
+        // Asumsi : Admin tidak perlu register karena sudah terdaftar di database dengan role Admin, dan dengan username
+        //          "admin" dan password "admin". Tetapi Admin masih bisa melakukan change profile karena pada class
+        //          class diagram dan usecase diagram, admin merupakan child dari User yang dapat melakukan change profile.
+        cbRole.getItems().addAll("Event Organizer", "Vendor", "Guest");
+        cbRole.setValue("Guest");
         registerButton = new Button("Register");
         lblAlreadyHaveAccount = new Label("Already have an account?");
         linkLogin = new Hyperlink("Login here");
@@ -53,8 +53,6 @@ public class RegisterPage implements EventHandler<ActionEvent>{
         hboxLink = new HBox(5, lblAlreadyHaveAccount, linkLogin);
         scene = new Scene(root, 1100, 550);
         uc = new UserController();
-        users = new ArrayList<>();
-        validate = false;
     }
 
     public void setPosition() {
@@ -131,7 +129,6 @@ public class RegisterPage implements EventHandler<ActionEvent>{
         init();
         setPosition();
         setStyle();
-//        users = uc.getUsers(users);
         events();
         view.Main.redirect(scene);
     }

@@ -1,10 +1,7 @@
 package controller;
 
-import database.DatabaseConnection;
 import model.User;
 
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
 
 public class UserController {
 
@@ -34,22 +31,16 @@ public class UserController {
     }
 
     public void changeProfile(String email, String name, String oldPassword, String newPassword) {
-        User user = User.getUserByEmail(email);
-        try {
-            if (user == null) {
-                throw new IllegalArgumentException("Profile update failed: User not found.");
-            }
+        checkChangeProfileInput(email, name, oldPassword, newPassword);
 
-            // Validasi input untuk change profile
-            checkChangeProfileInput(email, name, oldPassword, newPassword);
+        User user = view.Main.currUser;
+        user.checkChangeProfileInput(email, name, oldPassword, newPassword);
 
-            // Panggil method changeProfile
+        user.changeProfile(email, name, oldPassword, newPassword);
 
-            user.changeProfile(email, name, oldPassword, newPassword);
-            System.out.println("Profile updated successfully.");
-        } catch (Exception e) {
-            System.out.println("Profile update failed: " + e.getMessage());
-        }
+        user.setUser_email(email);
+        user.setUser_name(name);
+        user.setUser_password(newPassword);
     }
 
     public User getUserByEmail(String email) {
@@ -71,6 +62,7 @@ public class UserController {
         }
         return null;
     }
+
 
     public void checkRegisterInput(String email, String name, String password) {
         if (email == null || email.trim().isEmpty()) {
@@ -100,23 +92,18 @@ public class UserController {
     public void checkChangeProfileInput(String email, String name, String oldPassword, String newPassword) {
         if (email == null || email.trim().isEmpty()) {
            throw new IllegalArgumentException("Email cannot be empty.");
-//            return -1;
         }
 
         if (name == null || name.trim().isEmpty()) {
             throw new IllegalArgumentException("Username cannot be empty.");
-//            return -2;
         }
 
         if (newPassword == null || newPassword.length() < 5) {
             throw new IllegalArgumentException("New password must be at least 5 characters long.");
-//            return -3;
         }
 
         if (oldPassword == null || oldPassword.trim().isEmpty()) {
             throw new IllegalArgumentException("Old password cannot be empty.");
-//            return -4;
         }
-//        return 0;
     }
 }
