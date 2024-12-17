@@ -2,7 +2,6 @@ package view;
 
 import java.util.ArrayList;
 import java.util.Random;
-
 import controller.UserController;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -148,19 +147,17 @@ public class RegisterPage implements EventHandler<ActionEvent>{
             // Call the Controller to handle registration
             try {
                 uc.register(email, username, password, role);
-                Alert alert = new Alert(Alert.AlertType.INFORMATION, "Registration successful! Please login.", ButtonType.OK);
-                alert.showAndWait();
+                showSuccess("Registration Successful", "You have successfully registered!");
 
                 // Redirect to Login Page
                 Main.redirect(new LoginPage().scene);
             } catch (IllegalArgumentException ex) {
-                Alert alert = new Alert(Alert.AlertType.ERROR, ex.getMessage(), ButtonType.OK);
-                alert.showAndWait();
+                showAlert("Registration Failed", ex.getMessage());
             }
         }
         else if(e.getSource() == linkLogin) {
             clearFields();
-            view.Main.redirect(new LoginPage().scene);
+            Main.redirect(new LoginPage().scene);
         }
     }
 }

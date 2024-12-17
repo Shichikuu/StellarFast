@@ -12,7 +12,7 @@ public class User {
     private String user_name;
     private String user_password;
     private String user_role;
-    private static DatabaseConnection db = DatabaseConnection.getInstance();
+    protected static DatabaseConnection db = DatabaseConnection.getInstance();
 
 
     public User(String user_id, String user_email, String user_name, String user_password, String user_role) {

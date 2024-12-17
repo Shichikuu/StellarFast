@@ -3,31 +3,26 @@ package view;
 import java.util.ArrayList;
 
 import controller.UserController;
-import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
-import javafx.stage.Stage;
 import model.User;
 
 public class LoginPage implements EventHandler<ActionEvent>{
     private BorderPane root;
     private GridPane grid;
-    private Label title, emailLabel, passwordLabel;
+    private Label title, emailLabel, passwordLabel, lblDontHaveAccount;
     private TextField emailField;
     private PasswordField passwordField;
-    private Button registerButton, loginButton;
-    private HBox hbBtn;
+    private Button loginButton;
+    private Hyperlink linkRegister;
+    private HBox hbBtn, hboxLink;
     public Scene scene;
     private ArrayList<User> users;
     private static String userID = "";
@@ -50,7 +45,9 @@ public class LoginPage implements EventHandler<ActionEvent>{
         emailField = new TextField();
         passwordLabel = new Label("Password :");
         passwordField = new PasswordField();
-        registerButton = new Button("Register");
+        lblDontHaveAccount = new Label("Don't have an account?");
+        linkRegister = new Hyperlink("Register here");
+        hboxLink = new HBox(5, lblDontHaveAccount, linkRegister);
         loginButton = new Button("Login");
         hbBtn = new HBox(10);
         scene = new Scene(root, 1100, 550);
@@ -74,10 +71,12 @@ public class LoginPage implements EventHandler<ActionEvent>{
         grid.add(passwordLabel, 0, 1);
         grid.add(passwordField, 1, 1);
 
-        hbBtn.setAlignment(Pos.BOTTOM_RIGHT);
-        hbBtn.getChildren().add(registerButton);
+        hbBtn.setAlignment(Pos.CENTER_LEFT);
         hbBtn.getChildren().add(loginButton);
         grid.add(hbBtn, 1, 4);
+
+        hboxLink.setAlignment(Pos.CENTER_LEFT);
+        grid.add(hboxLink, 1, 5);
     }
 
     public void setStyle() {
@@ -90,7 +89,7 @@ public class LoginPage implements EventHandler<ActionEvent>{
     }
 
     private void events() {
-        registerButton.setOnAction(e -> handle(e));
+        linkRegister.setOnAction(e -> handle(e));
         loginButton.setOnAction(e -> handle(e));
     }
 
@@ -113,19 +112,21 @@ public class LoginPage implements EventHandler<ActionEvent>{
     @Override
     public void handle(ActionEvent e) {
         if(e.getSource() == loginButton) {
-//            int result = uc.loginValidation(emailField.getText(), passwordField.getText());
-//            if(result == -1) {
-//                showAlert("Error", "Email must be filled");
-//            } else if (result == -2) {
-//                showAlert("Error", "Password must be filled");
-//            }else if(result == -3) {
-//                showAlert("Login Error", "User does not exist");
-//            }
+            String email = emailField.getText();
+            String password = passwordField.getText();
+
+            try {
+                Main.currUser = uc.login(email, password);
+                showSuccess("Login Success", "Welcome " + view.Main.currUser.getUser_name());
+
+//                Main.redirect(new HomePage().scene);
+            }catch (Exception ex) {
+                showAlert("Login Failed", ex.getMessage());
+            }
         }
-        else if(e.getSource() == registerButton) {
+        else if(e.getSource() == linkRegister) {
             clearFields();
-            RegisterPage regist = new RegisterPage();
-            view.Main.redirect(regist.scene);
+            Main.redirect(new RegisterPage().scene);
         }
     }
 

@@ -9,7 +9,6 @@ import java.sql.SQLException;
 public class UserController {
 
     public void register(String email, String name, String password, String role) {
-        try {
             // Validasi input
             checkRegisterInput(email, name, password);
 
@@ -19,25 +18,18 @@ public class UserController {
 
             // Jika semua validasi lolos, lakukan registrasi
             user.register(email, name, password, role);
-            System.out.println("Registration successful!");
-        } catch (IllegalArgumentException e) {
-            System.out.println("Registration failed: " + e.getMessage());
-        }
     }
 
-    public void login(String email, String password) {
-        try{
-            checkLoginInput(email, password);
-            User user = User.login(email, password);
+    public User login(String email, String password) {
+        checkLoginInput(email, password);
 
-            if (user == null) {
-                throw new IllegalArgumentException("Invalid email or password.");
-            } else {
-                System.out.println("Login successful! Welcome, " + user.getUser_name());
-            }
-        }catch (IllegalArgumentException e) {
-            System.out.println("Login failed: " + e.getMessage());
+        User user = User.login(email, password);
+
+        if (user == null) {
+            throw new IllegalArgumentException("Invalid email or password.");
         }
+
+        return user;
 
     }
 
