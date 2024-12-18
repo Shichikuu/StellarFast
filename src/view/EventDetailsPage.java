@@ -51,7 +51,7 @@ public class EventDetailsPage {
 
     private void initButtons() {
         btnBack = new Button("Back to Events");
-        btnBack.setOnAction(e -> Main.redirect(new GuestEventPage().scene));
+        btnBack.setOnAction(e -> Main.redirect(new VendorEventPage().scene));
     }
 
     private void setLayout() {

@@ -44,15 +44,19 @@ public class OrganizerEventPage {
 
         TableColumn<Event, String> colEventId = new TableColumn<>("Event ID");
         colEventId.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getEvent_id()));
+        colEventId.setMinWidth(root.getWidth()/4);
 
         TableColumn<Event, String> colEventName = new TableColumn<>("Event Name");
         colEventName.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getEvent_name()));
+        colEventName.setMinWidth(root.getWidth()/4);
 
         TableColumn<Event, String> colEventDate = new TableColumn<>("Event Date");
         colEventDate.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getEvent_date()));
+        colEventDate.setMinWidth(root.getWidth()/4);
 
         TableColumn<Event, String> colEventLocation = new TableColumn<>("Event Location");
         colEventLocation.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getEvent_location()));
+        colEventLocation.setMinWidth(root.getWidth()/4);
 
         eventTable.getColumns().addAll(colEventId, colEventName, colEventDate, colEventLocation);
         eventTable.setItems(eventList);

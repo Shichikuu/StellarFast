@@ -48,9 +48,11 @@ public class VendorInvitationPage {
 
         TableColumn<Invitation, String> colEventName = new TableColumn<>("Event Name");
         colEventName.setCellValueFactory(data -> new SimpleStringProperty(ec.getEventNameFromEventId(data.getValue().getEvent_id())));
+        colEventName.setMinWidth(root.getWidth() / 2);
 
         TableColumn<Invitation, String> colStatus = new TableColumn<>("Status");
         colStatus.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getInvitation_status()));
+        colStatus.setMinWidth(root.getWidth() / 2);
 
         invitationTable.getColumns().addAll(colEventName, colStatus);
         invitationTable.setItems(invitationList);

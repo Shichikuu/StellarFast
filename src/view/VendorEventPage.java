@@ -40,19 +40,19 @@ public class VendorEventPage {
 
         TableColumn<Event, String> colEventId = new TableColumn<>("Event ID");
         colEventId.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getEvent_id()));
-        colEventId.setPrefWidth(root.getWidth() / 4);
+        colEventId.setMinWidth(root.getWidth() / 4);
 
         TableColumn<Event, String> colEventName = new TableColumn<>("Event Name");
         colEventName.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getEvent_name()));
-        colEventId.setPrefWidth(root.getWidth() / 4);
+        colEventId.setMinWidth(root.getWidth() / 4);
 
         TableColumn<Event, String> colEventDate = new TableColumn<>("Event Date");
         colEventDate.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getEvent_date()));
-        colEventId.setPrefWidth(root.getWidth() / 4);
+        colEventId.setMinWidth(root.getWidth() / 4);
 
         TableColumn<Event, String> colEventLocation = new TableColumn<>("Event Location");
         colEventLocation.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getEvent_location()));
-        colEventId.setPrefWidth(root.getWidth() / 4);
+        colEventId.setMinWidth(root.getWidth() / 4);
 
         eventTable.getColumns().addAll(colEventId, colEventName, colEventDate, colEventLocation);
         eventTable.setItems(eventList);

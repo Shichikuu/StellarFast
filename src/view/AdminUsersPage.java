@@ -43,19 +43,19 @@ public class AdminUsersPage {
 
         TableColumn<User, String> colUserId = new TableColumn<>("User ID");
         colUserId.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getUser_id()));
-        colUserId.setPrefWidth(root.getWidth() / 4);
+        colUserId.setMinWidth(root.getWidth() / 4);
 
         TableColumn<User, String> colUserName = new TableColumn<>("Name");
         colUserName.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getUser_name()));
-        colUserName.setPrefWidth(root.getWidth() / 4);
+        colUserName.setMinWidth(root.getWidth() / 4);
 
         TableColumn<User, String> colUserEmail = new TableColumn<>("Email");
         colUserEmail.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getUser_email()));
-        colUserEmail.setPrefWidth(root.getWidth() / 4);
+        colUserEmail.setMinWidth(root.getWidth() / 4);
 
         TableColumn<User, String> colUserRole = new TableColumn<>("Role");
         colUserRole.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getUser_role()));
-        colUserRole.setPrefWidth(root.getWidth() / 4);
+        colUserRole.setMinWidth(root.getWidth() / 4);
 
         userTable.getColumns().addAll(colUserId, colUserName, colUserEmail, colUserRole);
         userTable.setItems(userList);

@@ -52,9 +52,11 @@ public class AddGuestsPage {
 
         TableColumn<Guest, String> colGuestName = new TableColumn<>("Guest Name");
         colGuestName.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getUser_name()));
+        colGuestName.setMinWidth(root.getWidth() / 2);
 
         TableColumn<Guest, String> colGuestEmail = new TableColumn<>("Guest Email");
         colGuestEmail.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getUser_email()));
+        colGuestEmail.setMinWidth(root.getWidth() / 2);
 
         TableColumn<Guest, Boolean> colSelect = new TableColumn<>("Select");
 

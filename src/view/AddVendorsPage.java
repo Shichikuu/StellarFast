@@ -52,9 +52,11 @@ public class AddVendorsPage {
 
         TableColumn<Vendor, String> colVendorName = new TableColumn<>("Vendor Name");
         colVendorName.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getUser_name()));
+        colVendorName.setMinWidth(root.getWidth() / 2);
 
         TableColumn<Vendor, String> colVendorEmail = new TableColumn<>("Vendor Email");
         colVendorEmail.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getUser_email()));
+        colVendorEmail.setMinWidth(root.getWidth() / 2);
 
         TableColumn<Vendor, Boolean> colSelect = new TableColumn<>("Select");
         // Bind the checkbox state to the selection map
