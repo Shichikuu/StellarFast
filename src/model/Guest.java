@@ -84,4 +84,25 @@ public class Guest extends User{
         return invitations;
     }
 
+    // Added Method
+    public static Guest getGuestById(String userId) {
+        String sql = "SELECT * FROM users WHERE userId = ? AND role = 'Guest'";
+        try (PreparedStatement ps = db.preparedStatement(sql)) {
+            ps.setString(1, userId);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return new Guest(
+                        rs.getString("userId"),
+                        rs.getString("email"),
+                        rs.getString("name"),
+                        rs.getString("password"),
+                        rs.getString("role")
+                );
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
 }

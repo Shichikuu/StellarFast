@@ -13,27 +13,27 @@ public class GuestController {
 
     public void acceptInvitation(String eventID) {
         User currUser = Session.getInstance().getCurrentUser();
-        if(currUser instanceof Guest) {
-            ((Guest) currUser).acceptInvitation(eventID);
-        }
+        Guest guest = getGuestById(currUser.getUser_id());
+        guest.acceptInvitation(eventID);
     }
 
     // Asumsi : Di dalam sequence diagram, Vendor memiliki method ini, tetapi di dalam model class diagram tidak ada.
     //          Diasumsikan Guest juga memiliki method ini untuk melihat list invitation yang diterima.
     public List<Event> viewAcceptedEvents(String email) {
         User currUser = Session.getInstance().getCurrentUser();
-        if(currUser instanceof Guest) {
-            return ((Guest) currUser).viewAcceptedEvents(email);
-        }
-        return new ArrayList<>();
+        Guest guest = getGuestById(currUser.getUser_id());
+        return guest.viewAcceptedEvents(email);
     }
 
 
     public List<Invitation> getInvitations(String email) {
         User currUser = Session.getInstance().getCurrentUser();
-        if(currUser instanceof Guest) {
-            return ((Guest) currUser).getInvitations(email);
-        }
-        return new ArrayList<>();
+        Guest guest = getGuestById(currUser.getUser_id());
+        return guest.getInvitations(email);
+    }
+
+    // Added method
+    public Guest getGuestById(String guestId) {
+        return Guest.getGuestById(guestId);
     }
 }

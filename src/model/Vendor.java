@@ -88,4 +88,24 @@ public class Vendor extends User{
 
     }
 
+    // Added method
+    public static Vendor getVendorById(String vendorId) {
+        String sql = "SELECT * FROM users WHERE userId = ? AND role = 'Vendor'";
+        try (PreparedStatement ps = db.preparedStatement(sql)) {
+            ps.setString(1, vendorId);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return new Vendor(
+                        rs.getString("userId"),
+                        rs.getString("email"),
+                        rs.getString("name"),
+                        rs.getString("password")
+                );
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
 }
