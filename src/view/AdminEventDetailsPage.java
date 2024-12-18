@@ -135,9 +135,11 @@ public class AdminEventDetailsPage {
         VBox tableContainer = new VBox(10, new Label("Guest List:"), guestScrollPane, new Label("Vendor List:"), vendorScrollPane);
         tableContainer.setPadding(new Insets(10));
 
+        VBox btnContainer = new VBox(10, btnBack, btnDeleteEvent);
+
         root.setTop(detailPane);
         root.setCenter(tableContainer);
-        root.setBottom(btnBack);
+        root.setBottom(btnContainer);
         root.setPadding(new Insets(10));
     }
 
