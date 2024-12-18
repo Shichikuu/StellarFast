@@ -120,7 +120,7 @@ public class EventOrganizer extends User{
 
     public static List<Guest> getGuestsByTransactionID(String eventID){
         List<Guest> guests = new ArrayList<>();
-        String query = "SELECT u.* FROM users u JOIN invitations i ON u.userID = i.userID WHERE i.eventID = ? AND u.userRole = 'Guest'";
+        String query = "SELECT u.* FROM users u JOIN invitations i ON u.userID = i.userID WHERE i.invitationStatus = 'Accepted' AND i.eventID = ? AND u.userRole = 'Guest'";
         try (PreparedStatement ps = db.preparedStatement(query)) {
             ps.setString(1, eventID);
             try (ResultSet rs = ps.executeQuery()) {
@@ -141,7 +141,7 @@ public class EventOrganizer extends User{
 
     public static List<Vendor> getVendorsByTransactionID(String eventID){
         List<Vendor> vendors = new ArrayList<>();
-        String query = "SELECT u.* FROM users u JOIN invitations i ON u.userID = i.userID WHERE i.eventID = ? AND u.userRole = 'Vendor'";
+        String query = "SELECT u.* FROM users u JOIN invitations i ON u.userID = i.userID WHERE i.invitationStatus = 'Accepted' AND i.eventID = ? AND u.userRole = 'Vendor'";
         try (PreparedStatement ps = db.preparedStatement(query)) {
             ps.setString(1, eventID);
             try (ResultSet rs = ps.executeQuery()) {

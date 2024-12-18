@@ -145,6 +145,28 @@ public class User {
 
     }
 
+    // Added method
+    public static User getUserById(String id) {
+        String query = "SELECT * FROM users WHERE userId = ?";
+        try (PreparedStatement ps = db.preparedStatement(query)) {
+            ps.setString(1, id);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return new User(
+                            rs.getString("userId"),
+                            rs.getString("userEmail"),
+                            rs.getString("userName"),
+                            rs.getString("userPassword"),
+                            rs.getString("userRole")
+                    );
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     public String getUser_id() {
         return user_id;
     }

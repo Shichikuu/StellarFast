@@ -1,6 +1,7 @@
 package view;
 
 import controller.EventOrganizerController;
+import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -11,9 +12,13 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import model.Guest;
 import model.Vendor;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 public class AddVendorsPage {
     public Scene scene;
@@ -23,11 +28,13 @@ public class AddVendorsPage {
     private ObservableList<Vendor> vendorList;
     private String eventId;
     private EventOrganizerController eoc;
+    private Map<Vendor, BooleanProperty> selectionMap;
 
     public AddVendorsPage(String eventId) {
         this.eventId = eventId;
         this.eoc = new EventOrganizerController();
         root = new BorderPane();
+        selectionMap = new HashMap<>();
 
         initTable();
         initButtons();
@@ -50,8 +57,23 @@ public class AddVendorsPage {
         colVendorEmail.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getUser_email()));
 
         TableColumn<Vendor, Boolean> colSelect = new TableColumn<>("Select");
-        colSelect.setCellValueFactory(data -> new SimpleBooleanProperty(false));
-        colSelect.setCellFactory(CheckBoxTableCell.forTableColumn(colSelect));
+        // Bind the checkbox state to the selection map
+        colSelect.setCellValueFactory(data -> {
+            Vendor vendor = data.getValue();
+            selectionMap.putIfAbsent(vendor, new SimpleBooleanProperty(false));
+            return selectionMap.get(vendor);
+        });
+
+        // Create a custom CheckBoxTableCell
+        colSelect.setCellFactory(tc -> {
+            CheckBoxTableCell<Vendor, Boolean> cell = new CheckBoxTableCell<>(index -> {
+                Vendor vendor = vendorTable.getItems().get(index);
+                return selectionMap.computeIfAbsent(vendor, key -> new SimpleBooleanProperty(false));
+            });
+
+            return cell;
+        });
+        vendorTable.setEditable(true);
 
         vendorTable.getColumns().addAll(colVendorName, colVendorEmail, colSelect);
         vendorTable.setItems(vendorList);
@@ -80,7 +102,9 @@ public class AddVendorsPage {
     }
 
     private void addSelectedVendors() {
-        List<Vendor> selectedVendors = vendorTable.getSelectionModel().getSelectedItems();
+        List<Vendor> selectedVendors = vendorTable.getItems().stream()
+                .filter(vendor -> selectionMap.getOrDefault(vendor, new SimpleBooleanProperty(false)).get())
+                .collect(Collectors.toList());
 
         if (selectedVendors.isEmpty()) {
             showAlert("No Vendor Selected", "Please select at least one vendor to invite.");

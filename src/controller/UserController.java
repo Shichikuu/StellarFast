@@ -117,4 +117,9 @@ public class UserController {
             throw new IllegalArgumentException("Old password cannot be empty.");
         }
     }
+
+    //Added method
+    public User getUserById(String id) {
+        return User.getUserById(id);
+    }
 }

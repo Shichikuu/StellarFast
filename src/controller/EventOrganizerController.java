@@ -69,15 +69,19 @@ public class EventOrganizerController {
 
     // Penambahan parameter eventID
     public void checkAddVendorInput(String vendorID, String eventID){
+        UserController uc = new UserController();
+        User vendor = uc.getUserById(vendorID);
         if(EventOrganizer.checkAddVendorInput(vendorID, eventID)){
-            throw new IllegalArgumentException("Vendor is already invited to this event.");
+            throw new IllegalArgumentException( vendor.getUser_name() + " is already invited to this event.");
         }
     }
 
     // Penambahan parameter eventID
     public void checkAddGuestInput(String guestID, String eventID){
+        UserController uc = new UserController();
+        User guest = uc.getUserById(guestID);
         if(EventOrganizer.checkAddGuestInput(guestID, eventID)){
-            throw new IllegalArgumentException("Guest is already invited to this event.");
+            throw new IllegalArgumentException( guest.getUser_name() + " is already invited to this event.");
         }
 
     }

@@ -68,22 +68,22 @@ public class OrganizerEventDetailsPage {
 
         TableColumn<User, String> colGuestName = new TableColumn<>("Guest Name");
         colGuestName.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getUser_name()));
-        colGuestName.setPrefWidth(root.getWidth() / 2);
+        colGuestName.setMinWidth(root.getWidth() / 2);
 
         TableColumn<User, String> colGuestEmail = new TableColumn<>("Guest Email");
         colGuestEmail.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getUser_email()));
-        colGuestEmail.setPrefWidth(root.getWidth() / 2);
+        colGuestEmail.setMinWidth(root.getWidth() / 2);
 
         guestTable.getColumns().addAll(colGuestName, colGuestEmail);
         guestTable.setPrefHeight(300);
 
         TableColumn<User, String> colVendorName = new TableColumn<>("Vendor Name");
         colVendorName.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getUser_name()));
-        colVendorName.setPrefWidth(root.getWidth() / 2);
+        colVendorName.setMinWidth(root.getWidth() / 2);
 
         TableColumn<User, String> colVendorEmail = new TableColumn<>("Vendor Email");
         colVendorEmail.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getUser_email()));
-        colVendorEmail.setPrefWidth(root.getWidth() / 2);
+        colVendorEmail.setMinWidth(root.getWidth() / 2);
 
         vendorTable.getColumns().addAll(colVendorName, colVendorEmail);
         guestTable.setPrefHeight(300);

@@ -28,7 +28,7 @@ public class AddGuestsPage {
     private ObservableList<Guest> guestList;
     private String eventId;
     private EventOrganizerController eoc;
-    private Map<String, BooleanProperty> selectionMap;
+    private Map<Guest, BooleanProperty> selectionMap;
 
     public AddGuestsPage(String eventId) {
         this.eventId = eventId;
@@ -58,29 +58,23 @@ public class AddGuestsPage {
 
         TableColumn<Guest, Boolean> colSelect = new TableColumn<>("Select");
 
-// Bind the checkbox state to the selection map
+        // Bind the checkbox state to the selection map
         colSelect.setCellValueFactory(data -> {
             Guest guest = data.getValue();
-            selectionMap.putIfAbsent(guest.getUser_email(), new SimpleBooleanProperty(false));
-            return selectionMap.get(guest.getUser_email());
+            selectionMap.putIfAbsent(guest, new SimpleBooleanProperty(false));
+            return selectionMap.get(guest);
         });
 
-// Create a custom CheckBoxTableCell
+        // Create a custom CheckBoxTableCell
         colSelect.setCellFactory(tc -> {
             CheckBoxTableCell<Guest, Boolean> cell = new CheckBoxTableCell<>(index -> {
                 Guest guest = guestTable.getItems().get(index);
-                return selectionMap.computeIfAbsent(guest.getUser_email(), key -> new SimpleBooleanProperty(false));
-            });
-
-            // Add an event filter to handle clicks directly on the checkbox
-            cell.addEventFilter(MouseEvent.MOUSE_CLICKED, event -> {
-                if (event.getPickResult().getIntersectedNode() instanceof CheckBox) {
-                    event.consume(); // Prevent row selection when clicking the checkbox
-                }
+                return selectionMap.computeIfAbsent(guest, key -> new SimpleBooleanProperty(false));
             });
 
             return cell;
         });
+        guestTable.setEditable(true);
 
         guestTable.getColumns().addAll(colGuestName, colGuestEmail, colSelect);
         guestTable.setItems(guestList);
@@ -110,7 +104,7 @@ public class AddGuestsPage {
 
     private void addSelectedGuests() {
         List<Guest> selectedGuests = guestTable.getItems().stream()
-                .filter(guest -> selectionMap.getOrDefault(guest.getUser_email(), new SimpleBooleanProperty(false)).get())
+                .filter(guest -> selectionMap.getOrDefault(guest, new SimpleBooleanProperty(false)).get())
                 .collect(Collectors.toList());
 
         if (selectedGuests.isEmpty()) {
