@@ -34,7 +34,7 @@ public class Guest extends User{
                 "FROM events e " +
                 "JOIN invitations i ON e.eventId = i.eventId " +
                 "JOIN users u ON i.userId = u.userId " +
-                "WHERE u.email = ? AND i.invitationStatus = 'Accepted'";
+                "WHERE u.userEmail = ? AND i.invitationStatus = 'Accepted'";
         try (PreparedStatement ps = db.preparedStatement(sql)) {
             ps.setString(1, email);
             ResultSet rs = ps.executeQuery();
@@ -63,7 +63,7 @@ public class Guest extends User{
                 "FROM invitations i " +
                 "JOIN events e ON i.eventId = e.eventId " +
                 "JOIN users u ON i.userId = u.userId " +
-                "WHERE u.email = ? AND i.invitationStatus = 'Pending'";
+                "WHERE u.userEmail = ? AND i.invitationStatus = 'Pending'";
         try (PreparedStatement ps = db.preparedStatement(sql)) {
             ps.setString(1, email);
             ResultSet rs = ps.executeQuery();
@@ -86,17 +86,16 @@ public class Guest extends User{
 
     // Added Method
     public static Guest getGuestById(String userId) {
-        String sql = "SELECT * FROM users WHERE userId = ? AND role = 'Guest'";
+        String sql = "SELECT * FROM users WHERE userId = ? AND userRole = 'Guest'";
         try (PreparedStatement ps = db.preparedStatement(sql)) {
             ps.setString(1, userId);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
                 return new Guest(
                         rs.getString("userId"),
-                        rs.getString("email"),
-                        rs.getString("name"),
-                        rs.getString("password"),
-                        rs.getString("role")
+                        rs.getString("userEmail"),
+                        rs.getString("userName"),
+                        rs.getString("userPassword")
                 );
             }
         } catch (Exception e) {
