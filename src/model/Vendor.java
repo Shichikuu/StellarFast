@@ -84,6 +84,19 @@ public class Vendor extends User{
         return invitations;
     }
 
+    public void manageVendor(String description, String product) {
+        String sql = "INSERT INTO products (userId, productName, productDescription) VALUES (?, ?, ?)";
+        try (PreparedStatement ps = db.preparedStatement(sql)) {
+            ps.setString(1, this.user_id);
+            ps.setString(2, product);
+            ps.setString(3, description);
+            ps.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    // Unused method karena tidak mengakses database.
     public void checkManageVendorInput(String description, String product) {
 
     }

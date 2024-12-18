@@ -30,11 +30,24 @@ public class VendorController {
     }
 
     public void manageVendor(String description, String product) {
-
+        User currUser = Session.getInstance().getCurrentUser();
+        Vendor vendor = getVendorById(currUser.getUser_id());
+        checkManageVendorInput(description, product);
+        vendor.manageVendor(description, product);
     }
 
     public void checkManageVendorInput(String description, String product) {
+        if (product == null || product.trim().isEmpty()) {
+            throw new IllegalArgumentException("Product Name cannot be empty.");
+        }
 
+        if (description == null || description.trim().isEmpty()) {
+            throw new IllegalArgumentException("Product Description cannot be empty.");
+        }
+
+        if (description.length() > 200) {
+            throw new IllegalArgumentException("Product Description cannot exceed 200 characters.");
+        }
     }
 
     //Added Method

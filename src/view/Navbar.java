@@ -61,6 +61,7 @@ public class Navbar {
                 case "Vendor":
                     btnInvitation.setOnAction(e -> Main.redirect(new VendorInvitationPage().scene));
                     btnEvent.setOnAction(e -> Main.redirect(new VendorEventPage().scene));
+                    btnManageVendor.setOnAction(e -> Main.redirect(new ManageVendorPage().scene));
                     leftNav.getChildren().addAll(btnInvitation, btnEvent, btnManageVendor);
                     break;
                 case "Guest":
