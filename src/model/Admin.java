@@ -39,17 +39,20 @@ public class Admin extends User{
     }
 
     public static Event viewEventDetails(String EventID){
-        StringBuilder details = new StringBuilder();
+
         String query = "SELECT * FROM events WHERE eventId = ?";
         try (PreparedStatement ps = db.preparedStatement(query)) {
             ps.setString(1, EventID);
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
-                    details.append("Event Details:\n")
-                            .append("Name: ").append(rs.getString("eventName")).append("\n")
-                            .append("Date: ").append(rs.getString("eventDate")).append("\n")
-                            .append("Location: ").append(rs.getString("eventLocation")).append("\n")
-                            .append("Description: ").append(rs.getString("eventDescription")).append("\n\n");
+                    return new Event(
+                            rs.getString("eventId"),
+                            rs.getString("eventName"),
+                            rs.getString("eventDate"),
+                            rs.getString("eventLocation"),
+                            rs.getString("eventDescription"),
+                            rs.getString("organizerId")
+                    );
                 }
             }
         } catch (Exception e) {
@@ -124,7 +127,7 @@ public class Admin extends User{
 
     public static List<Guest> getGuestsByTransactionID(String eventID){
         List<Guest> guests = new ArrayList<>();
-        String query = "SELECT u.* FROM users u JOIN Invitation i ON u.userID = i.userID WHERE i.eventID = ? AND u.userRole = 'Guest'";
+        String query = "SELECT u.* FROM users u JOIN invitations i ON u.userID = i.userID WHERE i.eventID = ? AND u.userRole = 'Guest'";
         try (PreparedStatement ps = db.preparedStatement(query)) {
             ps.setString(1, eventID);
             try (ResultSet rs = ps.executeQuery()) {
@@ -145,7 +148,7 @@ public class Admin extends User{
 
     public static List<Vendor> getVendorsByTransactionID(String eventID){
         List<Vendor> vendors = new ArrayList<>();
-        String query = "SELECT u.* FROM users u JOIN Invitation i ON u.userID = i.userID WHERE i.eventID = ? AND u.userRole = 'Vendor'";
+        String query = "SELECT u.* FROM users u JOIN invitations i ON u.userID = i.userID WHERE i.eventID = ? AND u.userRole = 'Vendor'";
         try (PreparedStatement ps = db.preparedStatement(query)) {
             ps.setString(1, eventID);
             try (ResultSet rs = ps.executeQuery()) {

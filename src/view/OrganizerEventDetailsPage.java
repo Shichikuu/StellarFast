@@ -1,6 +1,6 @@
 package view;
 
-import controller.AdminController;
+import controller.EventOrganizerController;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.geometry.Insets;
@@ -8,27 +8,29 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import model.*;
+import model.Event;
+import model.Guest;
+import model.User;
+import model.Vendor;
 
 import java.util.List;
 
-public class AdminEventDetailsPage {
+public class OrganizerEventDetailsPage {
     public Scene scene;
     private BorderPane root;
     private TextField txtEventName, txtEventDate, txtEventLocation;
     private TextArea txtEventDescription;
-    private TableView<Guest> guestTable;
-    private TableView<Vendor> vendorTable;
-    private Button btnBack, btnDeleteEvent;
+    private TableView<User> guestTable, vendorTable;
+    private Button btnBack, btnEditName, btnAddVendors, btnAddGuests;
     private String eventId;
 
-    private AdminController ac;
+    private EventOrganizerController eoc;
 
-
-    public AdminEventDetailsPage(String eventId) {
+    public OrganizerEventDetailsPage(String eventId) {
         this.eventId = eventId;
-        this.ac = new AdminController();
+        this.eoc= new EventOrganizerController();
         root = new BorderPane();
 
         initFields();
@@ -64,46 +66,41 @@ public class AdminEventDetailsPage {
         guestTable = new TableView<>();
         vendorTable = new TableView<>();
 
-        TableColumn<Guest, String> colGuestName = new TableColumn<>("Guest Name");
+        TableColumn<User, String> colGuestName = new TableColumn<>("Guest Name");
         colGuestName.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getUser_name()));
         colGuestName.setPrefWidth(root.getWidth() / 2);
 
-        TableColumn<Guest, String> colGuestEmail = new TableColumn<>("Guest Email");
+        TableColumn<User, String> colGuestEmail = new TableColumn<>("Guest Email");
         colGuestEmail.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getUser_email()));
         colGuestEmail.setPrefWidth(root.getWidth() / 2);
 
         guestTable.getColumns().addAll(colGuestName, colGuestEmail);
+        guestTable.setPrefHeight(300);
 
-        TableColumn<Vendor, String> colVendorName = new TableColumn<>("Vendor Name");
+        TableColumn<User, String> colVendorName = new TableColumn<>("Vendor Name");
         colVendorName.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getUser_name()));
-        colGuestEmail.setPrefWidth(root.getWidth() / 2);
+        colVendorName.setPrefWidth(root.getWidth() / 2);
 
-        TableColumn<Vendor, String> colVendorEmail = new TableColumn<>("Vendor Email");
+        TableColumn<User, String> colVendorEmail = new TableColumn<>("Vendor Email");
         colVendorEmail.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getUser_email()));
         colVendorEmail.setPrefWidth(root.getWidth() / 2);
 
         vendorTable.getColumns().addAll(colVendorName, colVendorEmail);
+        guestTable.setPrefHeight(300);
     }
 
     private void initButtons() {
         btnBack = new Button("Back to Events");
-        btnBack.setOnAction(e -> Main.redirect(new AdminEventPage().scene));
+        btnBack.setOnAction(e -> Main.redirect(new OrganizerEventPage().scene));
 
-        btnDeleteEvent = new Button("Delete Event");
-        btnDeleteEvent.setOnAction(e -> deleteSelectedEvent());
-    }
+        btnEditName = new Button("Edit Event Name");
+        btnEditName.setOnAction(e -> editEventName());
 
-    private void deleteSelectedEvent() {
-        boolean confirmed = showConfirmation("Delete Event", "Are you sure you want to delete this event?");
-        if (confirmed) {
-            boolean success = ac.deleteEvent(eventId);
-            if (success) {
-                showAlert("Success", "Event deleted successfully.");
-                Main.redirect(new AdminEventPage().scene);
-            } else {
-                showAlert("Error", "Failed to delete the event.");
-            }
-        }
+        btnAddVendors = new Button("Add Vendors");
+        btnAddVendors.setOnAction(e -> Main.redirect(new AddVendorsPage(eventId).scene));
+
+        btnAddGuests = new Button("Add Guests");
+        btnAddGuests.setOnAction(e -> Main.redirect(new AddGuestsPage(eventId).scene));
     }
 
     private void setLayout() {
@@ -135,14 +132,17 @@ public class AdminEventDetailsPage {
         VBox tableContainer = new VBox(10, new Label("Guest List:"), guestScrollPane, new Label("Vendor List:"), vendorScrollPane);
         tableContainer.setPadding(new Insets(10));
 
+        HBox buttonBox = new HBox(10, btnEditName, btnAddVendors, btnAddGuests, btnBack);
+        buttonBox.setPadding(new Insets(10));
+
         root.setTop(detailPane);
         root.setCenter(tableContainer);
-        root.setBottom(btnBack);
+        root.setBottom(buttonBox);
         root.setPadding(new Insets(10));
     }
 
     private void populateFields() {
-        Event event = ac.viewEventDetails(eventId);
+        Event event = eoc.viewOrganizedEventDetails(eventId);
         txtEventName.setText(event.getEvent_name());
         txtEventDate.setText(event.getEvent_date());
         txtEventLocation.setText(event.getEvent_location());
@@ -150,11 +150,41 @@ public class AdminEventDetailsPage {
     }
 
     private void fetchAttendees() {
-        List<Guest> guests = ac.getGuestsByTransactionID(eventId);
+        List<Guest> guests = eoc.getGuestsByTransactionID(eventId);
         guestTable.setItems(FXCollections.observableArrayList(guests));
 
-        List<Vendor> vendors = ac.getVendorsByTransactionID(eventId);
+        List<Vendor> vendors = eoc.getVendorsByTransactionID(eventId);
         vendorTable.setItems(FXCollections.observableArrayList(vendors));
+    }
+
+    private void editEventName() {
+        Dialog<String> dialog = new Dialog<>();
+        dialog.setTitle("Edit Event Name");
+        dialog.setHeaderText("Enter the new event name:");
+
+        ButtonType okButtonType = new ButtonType("OK", ButtonBar.ButtonData.OK_DONE);
+        dialog.getDialogPane().getButtonTypes().addAll(okButtonType, ButtonType.CANCEL);
+
+        TextField newEventNameField = new TextField(txtEventName.getText());
+        dialog.getDialogPane().setContent(newEventNameField);
+
+        dialog.setResultConverter(dialogButton -> {
+            if (dialogButton == okButtonType) {
+                return newEventNameField.getText();
+            }
+            return null;
+        });
+
+        dialog.showAndWait().ifPresent(newEventName -> {
+            try {
+                eoc.editEventName(eventId, newEventName);
+                txtEventName.setText(newEventName);
+                showAlert("Success", "Event name updated successfully.");
+            } catch (IllegalArgumentException e) {
+                showAlert("Error", e.getMessage());
+            }
+
+        });
     }
 
     private void showAlert(String title, String message) {
@@ -163,15 +193,5 @@ public class AdminEventDetailsPage {
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.showAndWait();
-    }
-
-    private boolean showConfirmation(String title, String message) {
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-
-        ButtonType result = alert.showAndWait().orElse(ButtonType.CANCEL);
-        return result == ButtonType.OK;
     }
 }

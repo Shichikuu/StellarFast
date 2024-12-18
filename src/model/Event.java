@@ -1,5 +1,10 @@
 package model;
 
+import database.DatabaseConnection;
+
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+
 public class Event {
     private String event_id;
     private String event_name;
@@ -8,6 +13,7 @@ public class Event {
     private String event_description;
     private String organizer_id;
     private EventOrganizer organizer;
+    private static DatabaseConnection db = DatabaseConnection.getInstance();;
 
     public Event(String event_id, String event_name, String event_date, String event_location, String event_description, String organizer_id) {
         this.event_id = event_id;
@@ -19,11 +25,41 @@ public class Event {
     }
 
     public void createEvent(String eventName, String date, String location, String description, String organizerID) {
-
+        String query = "INSERT INTO events (eventId, eventName, eventDate, eventLocation, eventDescription, organizerId) VALUES (?, ?, ?, ?, ?, ?)";
+        try (PreparedStatement ps = db.preparedStatement(query)) {
+            this.event_id = "EV" + System.currentTimeMillis();
+            ps.setString(1, this.event_id);
+            ps.setString(2, eventName);
+            ps.setString(3, date);
+            ps.setString(4, location);
+            ps.setString(5, description);
+            ps.setString(6, organizerID);
+            ps.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
-    public void viewEventDetails(String eventID) {
-
+    public static Event viewEventDetails(String eventID) {
+        String query = "SELECT * FROM events WHERE eventId = ?";
+        try (PreparedStatement ps = db.preparedStatement(query)) {
+            ps.setString(1, eventID);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return new Event(
+                            rs.getString("eventId"),
+                            rs.getString("eventName"),
+                            rs.getString("eventDate"),
+                            rs.getString("eventLocation"),
+                            rs.getString("eventDescription"),
+                            rs.getString("organizerId")
+                    );
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     // Added get organizer from its id

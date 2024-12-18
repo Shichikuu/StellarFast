@@ -25,6 +25,7 @@ public class UserController {
             admin.setUser_email("admin");
             admin.setUser_name("admin");
             admin.setUser_password("admin");
+            admin.setUser_role("Admin");
             return admin;
         }
 

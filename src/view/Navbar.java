@@ -49,6 +49,8 @@ public class Navbar {
             // Role-based buttons
             switch (currUser.getUser_role()) {
                 case "Event Organizer":
+                    btnCreateEvent.setOnAction(e -> Main.redirect(new CreateEventPage().scene));
+                    btnEvent.setOnAction(e -> Main.redirect(new OrganizerEventPage().scene));
                     leftNav.getChildren().addAll(btnCreateEvent, btnEvent);
                     break;
                 case "Admin":
@@ -64,8 +66,6 @@ public class Navbar {
                     break;
             }
         }
-
-
 
         HBox navContainer = new HBox(20, leftNav, rightNav);
         navContainer.setStyle("-fx-padding: 10;");

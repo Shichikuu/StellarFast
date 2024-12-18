@@ -2,7 +2,6 @@ package model;
 
 import database.DatabaseConnection;
 
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
@@ -37,8 +36,7 @@ public class User {
     public void register(String email, String name, String password, String role) {
         String query = "INSERT INTO users (userId, userEmail, userName, userPassword, userRole) VALUES (?, ?, ?, ?, ?)";
         try (PreparedStatement ps = db.preparedStatement(query)) {
-            // Asumsikan user_id adalah UUID
-            this.user_id = java.util.UUID.randomUUID().toString();
+            this.user_id = "US" + System.currentTimeMillis();
             ps.setString(1, this.user_id);
             ps.setString(2, email);
             ps.setString(3, name);
