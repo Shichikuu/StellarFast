@@ -56,24 +56,37 @@ public class UserController {
 
     public User getUserByEmail(String email) {
         User user = User.getUserByEmail(email);
-        if (user != null) {
-            return user;
-        }
-        return null;
+        return user;
     }
 
     public User getUserByUsername(String name) {
         User user = User.getUserByUsername(name);
-        if (user != null) {
-            return user;
-        }
-        return null;
+        return user;
     }
 
 
     public void checkRegisterInput(String email, String name, String password) {
         if (email == null || email.trim().isEmpty()) {
             throw new IllegalArgumentException("Email cannot be empty.");
+        }
+
+        // Check for "@" symbol
+        int atIndex = email.indexOf('@');
+        if (atIndex == -1 || atIndex == 0 || atIndex == email.length() - 1) {
+            throw new IllegalArgumentException("Invalid email format: missing or misplaced '@'.");
+        }
+
+        // Check for "." after the "@" symbol
+        int dotIndex = email.lastIndexOf('.');
+        if (dotIndex == -1 || dotIndex < atIndex || dotIndex == email.length() - 1) {
+            throw new IllegalArgumentException("Invalid email format: missing or misplaced domain.");
+        }
+
+        // Check for invalid characters
+        for (char c : email.toCharArray()) {
+            if (!Character.isLetterOrDigit(c) && c != '@' && c != '.' && c != '-' && c != '_') {
+                throw new IllegalArgumentException("Invalid email format: contains invalid characters.");
+            }
         }
 
         if (name == null || name.trim().isEmpty()) {
@@ -101,8 +114,23 @@ public class UserController {
            throw new IllegalArgumentException("Email cannot be empty.");
         }
 
-        if(!email.contains("@")) {
-            throw new IllegalArgumentException("Invalid email address.");
+        // Check for "@" symbol
+        int atIndex = email.indexOf('@');
+        if (atIndex == -1 || atIndex == 0 || atIndex == email.length() - 1) {
+            throw new IllegalArgumentException("Invalid email format: missing or misplaced '@'.");
+        }
+
+        // Check for "." after the "@" symbol
+        int dotIndex = email.lastIndexOf('.');
+        if (dotIndex == -1 || dotIndex < atIndex || dotIndex == email.length() - 1) {
+            throw new IllegalArgumentException("Invalid email format: missing or misplaced domain.");
+        }
+
+        // Check for invalid characters
+        for (char c : email.toCharArray()) {
+            if (!Character.isLetterOrDigit(c) && c != '@' && c != '.' && c != '-' && c != '_') {
+                throw new IllegalArgumentException("Invalid email format: contains invalid characters.");
+            }
         }
 
         if (name == null || name.trim().isEmpty()) {

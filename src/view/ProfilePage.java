@@ -129,7 +129,7 @@ public class ProfilePage implements EventHandler<ActionEvent> {
 
             try {
                 // Call Controller to validate and update
-                uc.changeProfile(newName, newEmail, oldPassword, newPassword);
+                uc.changeProfile(newEmail, newName, oldPassword, newPassword);
 
                 showSuccess("Profile Updated", "Your profile has been successfully updated.");
                 Main.redirect(new ProfilePage().scene);
