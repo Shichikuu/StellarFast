@@ -62,10 +62,22 @@ public class Event {
         return null;
     }
 
-    // Added get organizer from its id
-    private EventOrganizer getOrganizerByOrganizerId(String organizerID) {
-        return organizer;
+    // Tambahan method buat invitation supaya bisa mengambil nama event
+    public static String getEventNameFromEventId(String eventID) {
+        String query = "SELECT eventName FROM events WHERE eventId = ?";
+        try (PreparedStatement ps = db.preparedStatement(query)) {
+            ps.setString(1, eventID);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getString("eventName");
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "";
     }
+
 
     public String getEvent_id() {
         return event_id;

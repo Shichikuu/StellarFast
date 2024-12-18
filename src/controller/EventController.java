@@ -48,4 +48,9 @@ public class EventController {
             throw new IllegalArgumentException("Event description must be 200 characters or less.");
         }
     }
+
+    // Tambahan method buat invitation supaya bisa mengambil nama event
+    public String getEventNameFromEventId(String eventID) {
+        return Event.getEventNameFromEventId(eventID);
+    }
 }

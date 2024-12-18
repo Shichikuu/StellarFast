@@ -6,8 +6,8 @@ import java.util.List;
 
 public class AdminController {
 
-    private void viewAllEvents(){
-
+    private List<Event> viewAllEvents(){
+        return Admin.viewAllEvents();
     }
 
     public Event viewEventDetails(String EventID){

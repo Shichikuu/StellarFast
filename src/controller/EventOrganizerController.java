@@ -69,7 +69,7 @@ public class EventOrganizerController {
 
     // Penambahan parameter eventID
     public void checkAddVendorInput(String vendorID, String eventID){
-        if(EventOrganizer.checkAddGuestInput(vendorID, eventID)){
+        if(EventOrganizer.checkAddVendorInput(vendorID, eventID)){
             throw new IllegalArgumentException("Vendor is already invited to this event.");
         }
     }

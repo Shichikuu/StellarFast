@@ -58,8 +58,6 @@ public class UserController {
         User user = User.getUserByEmail(email);
         if (user != null) {
             return user;
-        } else {
-            System.out.println("User not found.");
         }
         return null;
     }
@@ -68,8 +66,6 @@ public class UserController {
         User user = User.getUserByUsername(name);
         if (user != null) {
             return user;
-        } else {
-            System.out.println("User not found.");
         }
         return null;
     }

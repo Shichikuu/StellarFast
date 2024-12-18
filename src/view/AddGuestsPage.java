@@ -1,6 +1,7 @@
 package view;
 
 import controller.EventOrganizerController;
+import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -9,11 +10,15 @@ import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.CheckBoxTableCell;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import model.Guest;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 public class AddGuestsPage {
     public Scene scene;
@@ -23,11 +28,13 @@ public class AddGuestsPage {
     private ObservableList<Guest> guestList;
     private String eventId;
     private EventOrganizerController eoc;
+    private Map<String, BooleanProperty> selectionMap;
 
     public AddGuestsPage(String eventId) {
         this.eventId = eventId;
         this.eoc = new EventOrganizerController();
         root = new BorderPane();
+        selectionMap = new HashMap<>();
 
         initTable();
         initButtons();
@@ -50,8 +57,30 @@ public class AddGuestsPage {
         colGuestEmail.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getUser_email()));
 
         TableColumn<Guest, Boolean> colSelect = new TableColumn<>("Select");
-        colSelect.setCellValueFactory(data -> new SimpleBooleanProperty(false));
-        colSelect.setCellFactory(CheckBoxTableCell.forTableColumn(colSelect));
+
+// Bind the checkbox state to the selection map
+        colSelect.setCellValueFactory(data -> {
+            Guest guest = data.getValue();
+            selectionMap.putIfAbsent(guest.getUser_email(), new SimpleBooleanProperty(false));
+            return selectionMap.get(guest.getUser_email());
+        });
+
+// Create a custom CheckBoxTableCell
+        colSelect.setCellFactory(tc -> {
+            CheckBoxTableCell<Guest, Boolean> cell = new CheckBoxTableCell<>(index -> {
+                Guest guest = guestTable.getItems().get(index);
+                return selectionMap.computeIfAbsent(guest.getUser_email(), key -> new SimpleBooleanProperty(false));
+            });
+
+            // Add an event filter to handle clicks directly on the checkbox
+            cell.addEventFilter(MouseEvent.MOUSE_CLICKED, event -> {
+                if (event.getPickResult().getIntersectedNode() instanceof CheckBox) {
+                    event.consume(); // Prevent row selection when clicking the checkbox
+                }
+            });
+
+            return cell;
+        });
 
         guestTable.getColumns().addAll(colGuestName, colGuestEmail, colSelect);
         guestTable.setItems(guestList);
@@ -80,7 +109,9 @@ public class AddGuestsPage {
     }
 
     private void addSelectedGuests() {
-        List<Guest> selectedGuests = guestTable.getSelectionModel().getSelectedItems();
+        List<Guest> selectedGuests = guestTable.getItems().stream()
+                .filter(guest -> selectionMap.getOrDefault(guest.getUser_email(), new SimpleBooleanProperty(false)).get())
+                .collect(Collectors.toList());
 
         if (selectedGuests.isEmpty()) {
             showAlert("No Guest Selected", "Please select at least one guest to invite.");
