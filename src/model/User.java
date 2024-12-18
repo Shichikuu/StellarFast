@@ -7,11 +7,11 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
 public class User {
-    private String user_id;
-    private String user_email;
-    private String user_name;
-    private String user_password;
-    private String user_role;
+    protected String user_id;
+    protected String user_email;
+    protected String user_name;
+    protected String user_password;
+    protected String user_role;
     protected static DatabaseConnection db = DatabaseConnection.getInstance();
 
 
@@ -21,6 +21,13 @@ public class User {
         this.user_name = user_name;
         this.user_password = user_password;
         this.user_role = user_role;
+    }
+
+    public User(String user_id, String user_email, String user_name, String user_password) {
+        this.user_id = user_id;
+        this.user_email = user_email;
+        this.user_name = user_name;
+        this.user_password = user_password;
     }
 
     public User(){

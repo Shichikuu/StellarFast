@@ -5,9 +5,11 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ToolBar;
 import javafx.scene.layout.HBox;
 import model.User;
+import util.Session;
 
 public class Navbar {
-    public static ToolBar createNavbar(User currUser) {
+    public static ToolBar createNavbar() {
+        User currUser = Session.getInstance().getCurrentUser();
         HBox leftNav = new HBox(10); // Holds general navigation items
         HBox rightNav = new HBox(10); // Holds profile/logout or login/register
         leftNav.setPadding(new Insets(10));
@@ -31,9 +33,11 @@ public class Navbar {
         btnRegister.setOnAction(e -> Main.redirect(new RegisterPage().scene));
         btnProfile.setOnAction(e -> Main.redirect(new ProfilePage().scene));
         btnLogout.setOnAction(e -> {
-            Main.currUser = null; // Logout logic
+            Session.getInstance().clearSession(); // Logout logic
             Main.redirect(new LoginPage().scene);
         });
+
+
 
         // Default navbar when user is not logged in
         if (currUser == null) {
@@ -48,6 +52,8 @@ public class Navbar {
                     leftNav.getChildren().addAll(btnCreateEvent, btnEvent);
                     break;
                 case "Admin":
+                    btnEvent.setOnAction(e -> Main.redirect(new AdminEventPage().scene));
+                    btnUsers.setOnAction(e -> Main.redirect(new AdminUsersPage().scene));
                     leftNav.getChildren().addAll(btnEvent, btnUsers);
                     break;
                 case "Vendor":

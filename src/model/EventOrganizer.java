@@ -12,6 +12,11 @@ public class EventOrganizer extends User{
         super(user_id, user_email, user_name, user_password, user_role);
     }
 
+    public EventOrganizer(String user_id, String user_email, String user_name, String user_password) {
+        super(user_id, user_email, user_name, user_password);
+        this.user_role = "Event Organizer";
+    }
+
     public void createEvent(String eventName, String date, String location, String description, String organizerID) {
 
     }

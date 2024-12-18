@@ -7,6 +7,11 @@ public class Vendor extends User{
         super(user_id, user_email, user_name, user_password, user_role);
     }
 
+    public Vendor(String user_id, String user_email, String user_name, String user_password) {
+        super(user_id, user_email, user_name, user_password);
+        this.user_role = "Vendor";
+    }
+
     public void acceptInvitation(String eventID) {
 
     }

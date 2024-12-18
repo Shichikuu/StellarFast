@@ -51,7 +51,7 @@ public class RegisterPage implements EventHandler<ActionEvent>{
         linkLogin = new Hyperlink("Login here");
         hbBtn = new HBox(10);
         hboxLink = new HBox(5, lblAlreadyHaveAccount, linkLogin);
-        scene = new Scene(root, 1100, 550);
+        scene = new Scene(root, 800, 600);
         uc = new UserController();
     }
 

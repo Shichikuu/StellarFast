@@ -1,35 +1,40 @@
 package controller;
 
-import database.DatabaseConnection;
+import model.*;
+
+import java.util.List;
 
 public class AdminController {
-    private DatabaseConnection db = DatabaseConnection.getInstance();
 
-    public void viewEventDetails(String EventID){
-
-    }
-
-    public void deleteEvent(String EventID){
+    private void viewAllEvents(){
 
     }
 
-    public void deleteUser(String UserID){
-
+    public Event viewEventDetails(String EventID){
+         return Admin.viewEventDetails(EventID);
     }
 
-    public void getAllUsers(){
-
+    public boolean deleteEvent(String EventID){
+        return Admin.deleteEvent(EventID);
     }
 
-    public void getAllEvents(){
-
+    public boolean deleteUser(String UserID){
+        return Admin.deleteUser(UserID);
     }
 
-    public void getGuestsByTransactionID(String eventID){
-
+    public List<User> getAllUsers(){
+        return Admin.getAllUsers();
     }
 
-    public void getVendorsByTransactionID(String eventID){
+    public List<Event> getAllEvents(){
+        return Admin.getAllEvents();
+    }
 
+    public List<Guest> getGuestsByTransactionID(String eventID){
+        return Admin.getGuestsByTransactionID(eventID);
+    }
+
+    public List<Vendor> getVendorsByTransactionID(String eventID){
+        return Admin.getVendorsByTransactionID(eventID);
     }
 }

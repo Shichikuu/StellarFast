@@ -10,6 +10,8 @@ import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import model.User;
+import util.Session;
 
 public class ProfilePage implements EventHandler<ActionEvent> {
     private BorderPane root;
@@ -44,13 +46,13 @@ public class ProfilePage implements EventHandler<ActionEvent> {
 
         hbBtn = new HBox(10);
 
-        scene = new Scene(root, 1100, 550);
+        scene = new Scene(root, 800, 600);
         uc = new UserController();
     }
 
     public void setPosition() {
-        root.setTop(title);
-        root.setCenter(grid);
+        root.setCenter(title);
+        root.setBottom(grid);
 
         grid.setAlignment(Pos.TOP_CENTER);
         grid.setPrefHeight(350);
@@ -107,11 +109,11 @@ public class ProfilePage implements EventHandler<ActionEvent> {
         setPosition();
         setStyle();
         events();
-
+        User currUser = Session.getInstance().getCurrentUser();
         // Pre-fill fields with current user information
-        if (Main.currUser != null) {
-            emailField.setText(Main.currUser.getUser_email());
-            nameField.setText(Main.currUser.getUser_name());
+        if (currUser != null) {
+            emailField.setText(currUser.getUser_email());
+            nameField.setText(currUser.getUser_name());
         }
 
         Main.redirect(scene);

@@ -1,6 +1,5 @@
 package view;
 
-import java.util.ArrayList;
 
 import controller.UserController;
 import javafx.event.ActionEvent;
@@ -13,6 +12,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import model.User;
+import util.Session;
 
 public class LoginPage implements EventHandler<ActionEvent>{
     private BorderPane root;
@@ -49,7 +49,7 @@ public class LoginPage implements EventHandler<ActionEvent>{
         hboxLink = new HBox(5, lblDontHaveAccount, linkRegister);
         loginButton = new Button("Login");
         hbBtn = new HBox(10);
-        scene = new Scene(root, 1100, 550);
+        scene = new Scene(root, 800, 600);
         uc = new UserController();
     }
 
@@ -114,8 +114,9 @@ public class LoginPage implements EventHandler<ActionEvent>{
             String password = passwordField.getText();
 
             try {
-                Main.currUser = uc.login(email, password);
-                showSuccess("Login Success", "Welcome " + view.Main.currUser.getUser_name());
+                User currUser = uc.login(email, password);
+                Session.getInstance().setCurrentUser(currUser);
+                showSuccess("Login Success", "Welcome " + currUser.getUser_name());
 
                 Main.redirect(new ProfilePage().scene);
             }catch (Exception ex) {
@@ -133,7 +134,7 @@ public class LoginPage implements EventHandler<ActionEvent>{
         setPosition();
         setStyle();
         events();
-        view.Main.redirect(scene);
+        Main.redirect(scene);
     }
 
 }

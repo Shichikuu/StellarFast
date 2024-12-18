@@ -16,7 +16,7 @@ public class Admin extends User{
 
     // Asumsi : Di dalam sequence diagram, model Event mengakses method ini, tetapi di dalam model class diagram,
     //          hanya admin yang bisa mengakses method ini sehingga method ini tetap di class Admin.
-    public List<Event> viewAllEvents(){
+    public static List<Event> viewAllEvents(){
         List<Event> events = new ArrayList<>();
         String query = "SELECT * FROM events";
         try (PreparedStatement ps = db.preparedStatement(query);
@@ -38,7 +38,7 @@ public class Admin extends User{
 
     }
 
-    public String viewEventDetails(String EventID){
+    public static Event viewEventDetails(String EventID){
         StringBuilder details = new StringBuilder();
         String query = "SELECT * FROM events WHERE eventId = ?";
         try (PreparedStatement ps = db.preparedStatement(query)) {
@@ -50,19 +50,17 @@ public class Admin extends User{
                             .append("Date: ").append(rs.getString("eventDate")).append("\n")
                             .append("Location: ").append(rs.getString("eventLocation")).append("\n")
                             .append("Description: ").append(rs.getString("eventDescription")).append("\n\n");
-                } else {
-                    return "Event not found.";
                 }
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return details.toString();
+        return null;
     }
 
     // Asumsi : Di dalam sequence diagram, model Event mengakses method ini, tetapi di dalam model class diagram, hanya admin yang bisa mengakses method ini
     //          sehingga method ini tetap di class Admin.
-    public boolean deleteEvent(String EventID){
+    public static boolean deleteEvent(String EventID){
         String deleteInvitations = "DELETE FROM invitations WHERE eventId = ?";
         String deleteEvent = "DELETE FROM events WHERE eventId = ?";
             try (PreparedStatement psInv = db.preparedStatement(deleteInvitations);
@@ -79,7 +77,7 @@ public class Admin extends User{
         return false;
     }
 
-    public boolean deleteUser(String UserID){
+    public static boolean deleteUser(String UserID){
         String deleteInvitations = "DELETE FROM invitations WHERE userId = ?";
         String deleteEvent = "DELETE FROM events WHERE organizerId = ?";
         String deleteUser = "DELETE FROM users WHERE userId = ?";
@@ -99,7 +97,7 @@ public class Admin extends User{
         return false;
     }
 
-    public List<User> getAllUsers(){
+    public static List<User> getAllUsers(){
         List<User> users = new ArrayList<>();
         String query = "SELECT * FROM users";
         try (PreparedStatement ps = db.preparedStatement(query);
@@ -120,23 +118,22 @@ public class Admin extends User{
     }
 
     // Asumsi : viewAllEvents() memiliki fungsi yang sama dengan getAllEvents();
-    public List<Event> getAllEvents(){
+    public static List<Event> getAllEvents(){
         return viewAllEvents();
     }
 
-    public List<User> getGuestsByTransactionID(String eventID){
-        List<User> guests = new ArrayList<>();
+    public static List<Guest> getGuestsByTransactionID(String eventID){
+        List<Guest> guests = new ArrayList<>();
         String query = "SELECT u.* FROM users u JOIN Invitation i ON u.userID = i.userID WHERE i.eventID = ? AND u.userRole = 'Guest'";
         try (PreparedStatement ps = db.preparedStatement(query)) {
             ps.setString(1, eventID);
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
-                    guests.add(new User(
+                    guests.add(new Guest(
                             rs.getString("userID"),
                             rs.getString("userEmail"),
                             rs.getString("userName"),
-                            rs.getString("userPassword"),
-                            rs.getString("userRole")
+                            rs.getString("userPassword")
                     ));
                 }
             }
@@ -146,19 +143,18 @@ public class Admin extends User{
         return guests;
     }
 
-    public List<User> getVendorsByTransactionID(String eventID){
-        List<User> vendors = new ArrayList<>();
+    public static List<Vendor> getVendorsByTransactionID(String eventID){
+        List<Vendor> vendors = new ArrayList<>();
         String query = "SELECT u.* FROM users u JOIN Invitation i ON u.userID = i.userID WHERE i.eventID = ? AND u.userRole = 'Vendor'";
         try (PreparedStatement ps = db.preparedStatement(query)) {
             ps.setString(1, eventID);
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
-                    vendors.add(new User(
+                    vendors.add(new Vendor(
                             rs.getString("userID"),
                             rs.getString("userEmail"),
                             rs.getString("userName"),
-                            rs.getString("userPassword"),
-                            rs.getString("userRole")
+                            rs.getString("userPassword")
                     ));
                 }
             }

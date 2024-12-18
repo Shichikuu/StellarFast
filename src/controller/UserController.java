@@ -1,6 +1,7 @@
 package controller;
 
 import model.User;
+import util.Session;
 
 
 public class UserController {
@@ -18,6 +19,15 @@ public class UserController {
     }
 
     public User login(String email, String password) {
+        // For Administrator
+        if(email.equals("admin") && password.equals("admin")) {
+            User admin = new User();
+            admin.setUser_email("admin");
+            admin.setUser_name("admin");
+            admin.setUser_password("admin");
+            return admin;
+        }
+
         checkLoginInput(email, password);
 
         User user = User.login(email, password);
@@ -33,7 +43,7 @@ public class UserController {
     public void changeProfile(String email, String name, String oldPassword, String newPassword) {
         checkChangeProfileInput(email, name, oldPassword, newPassword);
 
-        User user = view.Main.currUser;
+        User user = Session.getInstance().getCurrentUser();
         user.checkChangeProfileInput(email, name, oldPassword, newPassword);
 
         user.changeProfile(email, name, oldPassword, newPassword);
@@ -92,6 +102,10 @@ public class UserController {
     public void checkChangeProfileInput(String email, String name, String oldPassword, String newPassword) {
         if (email == null || email.trim().isEmpty()) {
            throw new IllegalArgumentException("Email cannot be empty.");
+        }
+
+        if(!email.contains("@")) {
+            throw new IllegalArgumentException("Invalid email address.");
         }
 
         if (name == null || name.trim().isEmpty()) {
