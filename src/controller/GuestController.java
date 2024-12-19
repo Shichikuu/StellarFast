@@ -6,7 +6,6 @@ import model.Invitation;
 import model.User;
 import util.Session;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class GuestController {

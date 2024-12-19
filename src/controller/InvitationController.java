@@ -3,6 +3,9 @@ package controller;
 import database.DatabaseConnection;
 import model.Invitation;
 import model.User;
+import util.Session;
+
+import java.util.List;
 
 public class InvitationController {
     private DatabaseConnection db = DatabaseConnection.getInstance();
@@ -16,10 +19,12 @@ public class InvitationController {
     }
 
     public void acceptInvitation(String eventID) {
-
+        UserController userController = new UserController();
+        User currUser = Session.getInstance().getCurrentUser();
+        Invitation.acceptInvitation(currUser.getUser_id(), eventID);
     }
 
-    public void getInvitation(String email){
-
+    public List<Invitation> getInvitation(String email){
+        return Invitation.getInvitation(email);
     }
 }

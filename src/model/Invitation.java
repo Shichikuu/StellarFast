@@ -3,6 +3,9 @@ package model;
 import database.DatabaseConnection;
 
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Invitation {
     private String invitation_id;
@@ -43,8 +46,8 @@ public class Invitation {
     }
 
     // Added parameter for userId
-    public void acceptInvitation(String eventID, String userID) {
-        String query = "UPDATE invitations SET invitation_status = 'Accepted' WHERE user_id = ? AND event_id = ?";
+    public static void acceptInvitation(String eventID, String userID) {
+        String query = "UPDATE invitations SET invitationStatus = 'Accepted' WHERE userId = ? AND eventId = ?";
         try (PreparedStatement ps = db.preparedStatement(query)) {
             ps.setString(1, userID);
             ps.setString(2, eventID);
@@ -54,8 +57,25 @@ public class Invitation {
         }
     }
 
-    public void getInvitation(String email){
-
+    public static List<Invitation> getInvitation(String email){
+        String query = "SELECT * FROM invitations WHERE userId = (SELECT userId FROM users WHERE userEmail = ?)";
+        List<Invitation> invitations = new ArrayList<>();
+        try (PreparedStatement ps = db.preparedStatement(query)) {
+            ps.setString(1, email);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                invitations.add(new Invitation(
+                        rs.getString("invitationId"),
+                        rs.getString("eventId"),
+                        rs.getString("userId"),
+                        rs.getString("invitationStatus"),
+                        rs.getString("invitationRole")
+                ));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     public String getInvitation_id() {
