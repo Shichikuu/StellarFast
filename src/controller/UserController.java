@@ -47,7 +47,12 @@ public class UserController {
         User user = Session.getInstance().getCurrentUser();
         user.checkChangeProfileInput(email, name, oldPassword, newPassword);
 
-        user.changeProfile(email, name, oldPassword, newPassword);
+        if(newPassword != null && !newPassword.trim().isEmpty()) {
+            user.changeProfile(email, name, oldPassword, user.getUser_password());
+        }else{
+            user.changeProfile(email, name, oldPassword, newPassword);
+        }
+
 
         user.setUser_email(email);
         user.setUser_name(name);
@@ -137,13 +142,16 @@ public class UserController {
             throw new IllegalArgumentException("Username cannot be empty.");
         }
 
-        if (newPassword == null || newPassword.length() < 5) {
-            throw new IllegalArgumentException("New password must be at least 5 characters long.");
+        if(newPassword != null && !newPassword.trim().isEmpty()) {
+            if (newPassword.length() < 5) {
+                throw new IllegalArgumentException("New password must be at least 5 characters long.");
+            }
+
+            if (oldPassword == null || oldPassword.trim().isEmpty()) {
+                throw new IllegalArgumentException("Old password cannot be empty.");
+            }
         }
 
-        if (oldPassword == null || oldPassword.trim().isEmpty()) {
-            throw new IllegalArgumentException("Old password cannot be empty.");
-        }
     }
 
     //Added method
