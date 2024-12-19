@@ -12,7 +12,6 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
-import model.Guest;
 import model.Vendor;
 
 import java.util.HashMap;
@@ -66,7 +65,6 @@ public class AddVendorsPage {
             return selectionMap.get(vendor);
         });
 
-        // Create a custom CheckBoxTableCell
         colSelect.setCellFactory(tc -> {
             CheckBoxTableCell<Vendor, Boolean> cell = new CheckBoxTableCell<>(index -> {
                 Vendor vendor = vendorTable.getItems().get(index);

@@ -10,7 +10,6 @@ import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.CheckBoxTableCell;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import model.Guest;
@@ -67,7 +66,6 @@ public class AddGuestsPage {
             return selectionMap.get(guest);
         });
 
-        // Create a custom CheckBoxTableCell
         colSelect.setCellFactory(tc -> {
             CheckBoxTableCell<Guest, Boolean> cell = new CheckBoxTableCell<>(index -> {
                 Guest guest = guestTable.getItems().get(index);

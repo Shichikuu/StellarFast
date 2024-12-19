@@ -47,7 +47,7 @@ public class UserController {
         User user = Session.getInstance().getCurrentUser();
         user.checkChangeProfileInput(email, name, oldPassword, newPassword);
 
-        if(newPassword != null && !newPassword.trim().isEmpty()) {
+        if(newPassword.trim().isEmpty()) {
             user.changeProfile(email, name, oldPassword, user.getUser_password());
         }else{
             user.changeProfile(email, name, oldPassword, newPassword);

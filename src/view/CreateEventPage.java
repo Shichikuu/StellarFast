@@ -1,7 +1,6 @@
 package view;
 
 import controller.EventController;
-import controller.EventOrganizerController;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -37,7 +36,6 @@ public class CreateEventPage implements EventHandler<ActionEvent> {
         nameLabel = new Label("Event Name:");
         nameField = new TextField();
         dateLabel = new Label("Event Date (YYYY-MM-DD):");
-//        dateField = new TextField();
         datePicker = new DatePicker();
         locationLabel = new Label("Event Location:");
         locationField = new TextField();

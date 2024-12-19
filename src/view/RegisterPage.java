@@ -1,6 +1,5 @@
 package view;
 
-import java.util.ArrayList;
 import java.util.Random;
 import controller.UserController;
 import javafx.event.ActionEvent;
@@ -12,7 +11,6 @@ import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
-import model.User;
 
 public class RegisterPage implements EventHandler<ActionEvent>{
     private BorderPane root;
@@ -42,8 +40,7 @@ public class RegisterPage implements EventHandler<ActionEvent>{
         roleLabel = new Label("Role :");
         cbRole = new ComboBox<>();
         // Asumsi : Admin tidak perlu register karena sudah terdaftar di database dengan role Admin, dan dengan username
-        //          "admin" dan password "admin". Tetapi Admin masih bisa melakukan change profile karena pada class
-        //          class diagram dan usecase diagram, admin merupakan child dari User yang dapat melakukan change profile.
+        //          "admin" dan password "admin". Admin juga tidak bisa change profile.
         cbRole.getItems().addAll("Event Organizer", "Vendor", "Guest");
         cbRole.setValue("Guest");
         registerButton = new Button("Register");

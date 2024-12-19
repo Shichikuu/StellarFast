@@ -24,17 +24,7 @@ public class LoginPage implements EventHandler<ActionEvent>{
     private Hyperlink linkRegister;
     private HBox hbBtn, hboxLink;
     public Scene scene;
-    private static String userID = "";
-    private static String userRole = "";
     private UserController uc;
-
-    public static String getUserID() {
-        return userID;
-    }
-
-    public static String getUserRole() {
-        return userRole;
-    }
 
     public void init() {
         root = new BorderPane();
@@ -117,8 +107,11 @@ public class LoginPage implements EventHandler<ActionEvent>{
                 User currUser = uc.login(email, password);
                 Session.getInstance().setCurrentUser(currUser);
                 showSuccess("Login Success", "Welcome " + currUser.getUser_name());
-
-                Main.redirect(new ProfilePage().scene);
+                if(currUser.getUser_role().equals("Admin")){
+                    Main.redirect(new AdminEventPage().scene);
+                }else{
+                    Main.redirect(new ProfilePage().scene);
+                }
             }catch (Exception ex) {
                 showAlert("Login Failed", ex.getMessage());
             }

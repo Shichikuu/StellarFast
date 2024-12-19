@@ -15,20 +15,17 @@ public class Navbar {
         leftNav.setPadding(new Insets(10));
         rightNav.setPadding(new Insets(10));
 
-        // Buttons visible to all users
         Button btnLogin = new Button("Login");
         Button btnRegister = new Button("Register");
         Button btnProfile = new Button("Profile");
         Button btnLogout = new Button("Logout");
 
-        // Dynamic Buttons
         Button btnCreateEvent = new Button("Create Event");
         Button btnEvent = new Button("Event");
         Button btnUsers = new Button("Users");
         Button btnInvitation = new Button("Invitation");
         Button btnManageVendor = new Button("Manage Vendor");
 
-        // Add event listeners
         btnLogin.setOnAction(e -> Main.redirect(new LoginPage().scene));
         btnRegister.setOnAction(e -> Main.redirect(new RegisterPage().scene));
         btnProfile.setOnAction(e -> Main.redirect(new ProfilePage().scene));
@@ -39,7 +36,6 @@ public class Navbar {
 
 
 
-        // Default navbar when user is not logged in
         if (currUser == null) {
             rightNav.getChildren().addAll(btnLogin, btnRegister);
         } else {
@@ -56,6 +52,7 @@ public class Navbar {
                 case "Admin":
                     btnEvent.setOnAction(e -> Main.redirect(new AdminEventPage().scene));
                     btnUsers.setOnAction(e -> Main.redirect(new AdminUsersPage().scene));
+                    rightNav.getChildren().removeAll(btnProfile);
                     leftNav.getChildren().addAll(btnEvent, btnUsers);
                     break;
                 case "Vendor":
