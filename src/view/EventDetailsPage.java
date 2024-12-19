@@ -7,6 +7,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import model.Event;
+import util.Session;
 
 public class EventDetailsPage {
     public Scene scene;
@@ -50,7 +51,12 @@ public class EventDetailsPage {
 
     private void initButtons() {
         btnBack = new Button("Back to Events");
-        btnBack.setOnAction(e -> Main.redirect(new VendorEventPage().scene));
+        if(Session.getInstance().getCurrentUser().getUser_role().equals("Vendor")) {
+            btnBack.setOnAction(e -> Main.redirect(new VendorEventPage().scene));
+        }else{
+            btnBack.setOnAction(e -> Main.redirect(new GuestEventPage().scene));
+        }
+
     }
 
     private void setLayout() {

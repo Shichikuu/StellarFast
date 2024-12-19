@@ -118,6 +118,7 @@ public class EventOrganizer extends User{
         return vendors;
     }
 
+    // Asumsi : Semua attendee adalah semua users yang invitationnya di accept.
     public static List<Guest> getGuestsByTransactionID(String eventID){
         List<Guest> guests = new ArrayList<>();
         String query = "SELECT u.* FROM users u JOIN invitations i ON u.userID = i.userID WHERE i.invitationStatus = 'Accepted' AND i.eventID = ? AND u.userRole = 'Guest'";
